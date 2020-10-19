@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eu
 
-[ ! -f /data/config.json ] && cp /config.json /data/config.json
+[ ! -f /root/.config/Red-DiscordBot/config.json ] && cp /config.json /root/.config/Red-DiscordBot/config.json
 
 exec redbot container
