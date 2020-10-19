@@ -20,7 +20,3 @@ COPY root/ /
 VOLUME /data
 
 CMD ["/app/helper.sh"]
-
-ARG CREATED
-
-LABEL org.opencontainers.image.created=$CREATED
