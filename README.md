@@ -1,6 +1,9 @@
 # Red-docker
 The Red Discord bot, packaged with alpine
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/vilgotf/red-discordbot)](https://hub.docker.com/r/vilgotf/red-discordbot)
+[![Image Size](https://images.microbadger.com/badges/image/vilgotf/red-discordbot.svg)](https://microbadger.com/images/vilgotf/red-discordbot)
+
 ## How to run
 ```
 podman run -it --label "io.containers.autoupdate=image" --name red -v /persistence_folder:/data:Z vilgotf/red-discordbot:latest (CTRL C after done with setup)
