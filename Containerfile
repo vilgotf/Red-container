@@ -22,5 +22,7 @@ VOLUME /data
 CMD ["/app/helper.sh"]
 
 ARG CREATED
+ARG REVISION
 
 LABEL org.opencontainers.image.created=$CREATED
+LABEL org.opencontainers.image.revision=$REVISION
