@@ -1,9 +1,0 @@
-#!/bin/bash
-
-readonly COMMON_OPTS="-f $DOCKERFILE_PATH"
-
-#for i in minimal audio; do
-#	docker build $COMMON_OPTS -t $i --target $i .
-#done
-
-docker build $COMMON_OPTS -t latest --target audio .
