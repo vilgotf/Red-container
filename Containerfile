@@ -1,12 +1,17 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-FROM python:3.8-alpine AS minimal
+FROM python:3.8-alpine AS common
 
 LABEL org.opencontainers.image.description The Red Discord bot, packaged with alpine
 LABEL org.opencontainers.image.source https://github.com/vilgotf/Red-docker
 LABEL org.opencontainers.image.licenses GPL-3.0-only
 
-COPY root/config.json /root/.config/Red-DiscordBot/config.json
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV PIP_NO_CACHE_DIR=1
+
+RUN adduser -D red
+
+COPY --chown=red root/config.json /home/red/.config/Red-DiscordBot/config.json
 
 RUN apk --no-cache add git
 RUN apk --no-cache add -t build-dependencies build-base \
@@ -17,8 +22,16 @@ VOLUME /data
 
 CMD redbot container
 
-FROM minimal AS audio
+
+FROM common AS minimal
+
+USER red
+
+
+FROM common AS audio
 
 RUN apk --no-cache add \
 	openjdk11-jre-headless \
 	libstdc++
+
+USER red
