@@ -6,18 +6,16 @@ LABEL org.opencontainers.image.description The Red Discord bot, packaged with al
 LABEL org.opencontainers.image.source https://github.com/vilgotf/Red-docker
 LABEL org.opencontainers.image.licenses GPL-3.0-only
 
-RUN mkdir -p /root/.config/Red-DiscordBot
+COPY root/config.json /root/.config/Red-DiscordBot/config.json
 
 RUN apk --no-cache add git
 RUN apk --no-cache add -t build-dependencies build-base \
 	&& pip install Red-Discordbot \
 	&& apk del build-dependencies
 
-COPY root/ /
-
 VOLUME /data
 
-CMD ["/app/helper.sh"]
+CMD redbot container
 
 FROM minimal AS audio
 
