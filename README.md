@@ -9,7 +9,7 @@ The Red Discord bot, packaged with alpine
 podman run -it --label "io.containers.autoupdate=image" --name red -v red-discordbot:/data:Z vilgotf/red-discordbot (CTRL C after done with setup)
 podman generate systemd --restart-policy=always --new --files --name red
 cp container-red.service ~/.config/systemd/user
-systemctl enable --now container-red.service
+systemctl --user enable --now container-red.service
 ```
 
 If you want the container to continue run even when your not logged in:
