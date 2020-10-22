@@ -8,6 +8,7 @@ LABEL org.opencontainers.image.licenses GPL-3.0-only
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 ENV PIP_NO_CACHE_DIR=1
+ENV PATH="/home/red/.local/bin:$PATH"
 
 RUN adduser -D red
 
@@ -15,7 +16,7 @@ COPY --chown=red root/config.json /home/red/.config/Red-DiscordBot/config.json
 
 RUN apk --no-cache add git
 RUN apk --no-cache add -t build-dependencies build-base \
-	&& pip install Red-Discordbot \
+	&& su red -c "pip install --user Red-Discordbot" \
 	&& apk del build-dependencies
 
 VOLUME /data
