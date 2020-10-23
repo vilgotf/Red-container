@@ -2,7 +2,7 @@
 
 FROM python:3.8-alpine AS common
 
-LABEL org.opencontainers.image.description The Red Discord bot, packaged with alpine
+LABEL org.opencontainers.image.description Minimal implementation of the Red Discord bot
 LABEL org.opencontainers.image.source https://github.com/vilgotf/Red-docker
 LABEL org.opencontainers.image.licenses GPL-3.0-only
 

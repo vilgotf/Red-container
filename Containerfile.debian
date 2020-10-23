@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+FROM python:3.8-slim AS audio
+
+LABEL org.opencontainers.image.description Minimal implementation of the Red Discord bot
+LABEL org.opencontainers.image.source https://github.com/vilgotf/Red-docker
+LABEL org.opencontainers.image.licenses GPL-3.0-only
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV PIP_NO_CACHE_DIR=1
+ENV PATH="/home/red/.local/bin:$PATH"
+
+RUN useradd red
+
+COPY --chown=red root/config.json /home/red/.config/Red-DiscordBot/config.json
+
+RUN mkdir -p /usr/share/man/man1/ \
+	&& apt update \
+        && apt install -y --no-install-recommends \
+	git \
+	build-essential \
+	openjdk-11-jre-headless \
+        && su red -c "pip install --user Red-Discordbot" \
+        && apt purge -y build-essential \
+        && apt autoremove -y \
+        && rm -rf /var/lib/apt/lists/* /usr/share/man/man1/
+
+USER red
+
+VOLUME /data
+
+CMD if [ ! -z ${TOKEN+x} ]; then redbot container --edit --no-prompt --token $TOKEN; fi \
+        && if [ ! -z ${PREFIX+x} ]; then redbot container --edit --no-prompt --prefix $PREFIX; fi \
+        && redbot container
