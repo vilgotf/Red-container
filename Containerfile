@@ -21,7 +21,9 @@ RUN apk --no-cache add -t build-dependencies build-base \
 
 VOLUME /data
 
-CMD redbot container
+CMD if [ ! -z ${TOKEN+x} ]; then redbot container --edit --no-prompt --token $TOKEN; fi \
+	&& if [ ! -z ${PREFIX+x} ]; then redbot container --edit --no-prompt --prefix $PREFIX; fi \
+	&& redbot container
 
 
 FROM common AS minimal
