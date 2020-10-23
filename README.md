@@ -12,6 +12,8 @@ cp container-red.service ~/.config/systemd/user
 systemctl --user enable --now container-red.service
 ```
 
+The environmental variables `PREFIX` and `TOKEN` can be set for noninteractive setup
+
 If you want the container to continue run even when your not logged in:
 ```
 loginctl enable-linger <username>
