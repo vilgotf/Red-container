@@ -1,4 +1,4 @@
-# Red-docker
+# Red-container
 Minimal rootless implementation of the Red Discord bot
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/vilgotf/red-discordbot)](https://hub.docker.com/r/vilgotf/red-discordbot)
