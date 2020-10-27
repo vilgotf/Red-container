@@ -23,7 +23,7 @@ VOLUME /data
 
 CMD if [ ! -z ${TOKEN+x} ]; then redbot container --edit --no-prompt --token $TOKEN; fi \
 	&& if [ ! -z ${PREFIX+x} ]; then redbot container --edit --no-prompt --prefix $PREFIX; fi \
-	&& redbot container
+	&& exec redbot container
 
 
 FROM common AS minimal
