@@ -21,7 +21,7 @@ FROM python:3.8-slim AS audio
 
 ENV PATH="/home/red/.local/bin:$PATH"
 
-RUN useradd red -u ${UID:-1000}
+RUN useradd red
 
 COPY --chown=red --from=compile /root/.local /home/red/.local
 COPY --chown=red root/config.json /home/red/.config/Red-DiscordBot/config.json
