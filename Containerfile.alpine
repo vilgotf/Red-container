@@ -20,7 +20,7 @@ FROM python:3.8-alpine AS common
 
 ENV PATH="/home/red/.local/bin:$PATH"
 
-RUN adduser -D red
+RUN adduser -D red -u ${UID:-1000}
 
 COPY --chown=red --from=compile /root/.local /home/red/.local
 COPY --chown=red root/config.json /home/red/.config/Red-DiscordBot/config.json
