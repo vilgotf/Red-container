@@ -15,7 +15,8 @@ RUN apt update \
 RUN pip install --user Red-Discordbot
 
 #Clean
-RUN find ~/.local/lib/python3.8/site-packages -regex '^.*\(__pycache__\|\.py[co]\|dist-info.*\)$' -delete
+RUN find ~/.local/lib/python3.8/site-packages -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
+
 
 FROM python:3.8-slim AS audio
 
