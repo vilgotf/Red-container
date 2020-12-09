@@ -47,9 +47,11 @@ RUN apk --no-cache add \
 
 USER red
 
-FROM audio AS full
+FROM common AS full
 
 RUN apk --no-cache add \
+	openjdk11-jre-headless \
+	libstdc++ \
 	build-base
 
 USER red
