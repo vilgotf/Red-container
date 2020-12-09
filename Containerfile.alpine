@@ -46,3 +46,10 @@ RUN apk --no-cache add \
 	libstdc++
 
 USER red
+
+FROM audio AS full
+
+RUN apk --no-cache add \
+	build-base
+
+USER red

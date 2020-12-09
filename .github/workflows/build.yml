@@ -36,9 +36,26 @@ jobs:
             vilgotf/red-discordbot:latest
             vilgotf/red-discordbot:audio
       -
+        name: Build and push full
+        uses: docker/build-push-action@v2
+        with:
+          file: ./Containerfile.alpine
+          target: full
+          push: true
+          tags: vilgotf/red-discordbot:full
+      -
         name: Build and push audio-debian
         uses: docker/build-push-action@v2
         with:
           file: ./Containerfile.debian
+          target: audio
           push: true
           tags: vilgotf/red-discordbot:audio-debian
+      -
+        name: Build and push full-debian
+        uses: docker/build-push-action@v2
+        with:
+          file: ./Containerfile.debian
+          target: full
+          push: true
+          tags: vilgotf/red-discordbot:full-debian

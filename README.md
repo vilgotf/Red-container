@@ -8,9 +8,11 @@ Minimal rootless implementation of the Red Discord bot
 ## List of tags
 1. `minimal` (no audio support)
 2. `audio` / `latest`
-3. `audio-debian`
+3. `full` (gcc etcetera)
+4. `audio-debian`
+5. `full-debian`
 
-(1 and 2 are based on Alpine)
+(1, 2 and 3 are based on Alpine)
 
 ## How to run
 ```

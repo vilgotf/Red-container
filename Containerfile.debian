@@ -18,7 +18,7 @@ RUN pip install --user Red-Discordbot
 RUN find ~/.local/lib/python3.8/site-packages -regex '^.*\(__pycache__\|\.py[co]\)$' -delete
 
 
-FROM python:3.8-slim AS audio
+FROM python:3.8-slim AS common
 
 ENV PATH="/home/red/.local/bin:$PATH"
 
@@ -34,10 +34,23 @@ RUN mkdir -p /usr/share/man/man1 \
 	openjdk-11-jre-headless \
         && rm -rf /var/lib/apt/lists/* /usr/share/man
 
-USER red
-
 VOLUME /data
 
 CMD if [ ! -z ${TOKEN+x} ]; then redbot container --edit --no-prompt --token $TOKEN; fi \
         && if [ ! -z ${PREFIX+x} ]; then redbot container --edit --no-prompt --prefix $PREFIX; fi \
         && exec redbot container
+
+
+FROM common AS audio
+
+USER red
+
+
+FROM audio AS full
+
+RUN apt update \
+	&& apt install -y --no-install-recommends \
+	build-essential \
+	&& rm -rf /var/lib/apt/lists/*
+
+USER red
