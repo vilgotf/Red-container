@@ -1,5 +1,5 @@
 # Red-container
-Minimal rootless implementation of the Red Discord bot
+Minimal rootless implementation of the Red Discord bot.
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/vilgotf/red-discordbot)](https://hub.docker.com/r/vilgotf/red-discordbot)
 [![Image Size](https://images.microbadger.com/badges/image/vilgotf/red-discordbot.svg)](https://microbadger.com/images/vilgotf/red-discordbot)
@@ -16,9 +16,9 @@ Minimal rootless implementation of the Red Discord bot
 
 ## How to run
 ```
-podman run -it --label "io.containers.autoupdate=image" --name red -v red-discordbot:/data:Z vilgotf/red-discordbot (CTRL C after done with setup)
+podman run -it --label "io.containers.autoupdate=image" --name red -v red-discordbot:/data:Z docker.io/vilgotf/red-discordbot (CTRL C after done with setup)
 podman generate systemd --restart-policy=always --new --files --name red
-cp container-red.service ~/.config/systemd/user
+mv container-red.service ~/.config/systemd/user
 systemctl --user enable --now container-red.service
 ```
 
@@ -28,11 +28,3 @@ If you want the container to continue run even when your not logged in:
 ```
 loginctl enable-linger <username>
 ```
-
-## Comparisons as of 2020/12/9
-### Image size
-| | minimal/noaudio | audio | full
-| --- | --- | --- | ---
-| vilgotf/red-discordbot | 129MB | 298MB | 503MB
-| vilgotf/red-discordbot(debian) | | 499MB | 661MB
-| phasecorex/red-discordbot | 364MB | 573MB | 981MB
