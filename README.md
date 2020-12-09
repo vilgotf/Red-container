@@ -29,21 +29,10 @@ If you want the container to continue run even when your not logged in:
 loginctl enable-linger <username>
 ```
 
-## Comparisons as of 24/10/20
-### Ram usage
-| | minimal/noaudio | audio |
-| --- | --- | ---
-| vilgotf/red-discordbot | 62MB | 472MB
-| vilgotf/red-discordbot(debian) | | 509MB
-| phasecorex/red-discordbot<sup>[1](#phasecorex-ram)</sup> | 68MB | 519MB
-
+## Comparisons as of 2020/12/9
 ### Image size
-| | minimal/noaudio | audio
-| --- | --- | ---
-| vilgotf/red-discordbot | 132MB | 300MB
-| vilgotf/red-discordbot(debian | | 501MB
-| phasecorex/red-discordbot<sup>[2](#phasecorex-image)</sup> | 365MB | 572MB
-
-<a name="phasecorex-ram">1</a>: Note that phasecorex's image will, on first launch, be larger by ~200MB since it installs Red-Discordbot inside of the container.
-
-<a name="phasecorex-image">2</a>: Note that phasecorex's image doesn't include Red-Discordbot whereas mine does
+| | minimal/noaudio | audio | full
+| --- | --- | --- | ---
+| vilgotf/red-discordbot | 129MB | 298MB | 503MB
+| vilgotf/red-discordbot(debian) | | 499MB | 661MB
+| phasecorex/red-discordbot | 364MB | 573MB | 981MB
