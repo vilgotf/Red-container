@@ -2,11 +2,6 @@
 
 FROM python:3.8-alpine AS compile
 
-LABEL org.opencontainers.image.title Red-container
-LABEL org.opencontainers.image.description Minimal rootless implementation of the Red Discord bot
-LABEL org.opencontainers.image.source https://github.com/vilgotf/Red-docker
-LABEL org.opencontainers.image.licenses GPL-3.0-only
-
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
 RUN apk add build-base
@@ -17,6 +12,11 @@ RUN find ~/.local/lib/python3.8/site-packages -regex '^.*\(__pycache__\|\.py[co]
 
 
 FROM python:3.8-alpine AS common
+
+LABEL org.opencontainers.image.title Red-container
+LABEL org.opencontainers.image.description Minimal rootless implementation of the Red Discord bot
+LABEL org.opencontainers.image.source https://github.com/vilgotf/Red-docker
+LABEL org.opencontainers.image.licenses GPL-3.0-only
 
 ENV PATH="/home/red/.local/bin:$PATH"
 
@@ -39,19 +39,20 @@ FROM common AS minimal
 USER red
 
 
-FROM common AS audio
+FROM common AS audio-build
 
 RUN apk --no-cache add \
 	openjdk11-jre-headless \
 	libstdc++
 
+
+FROM audio-build AS audio
+
 USER red
 
-FROM common AS full
+FROM audio-build AS full
 
 RUN apk --no-cache add \
-	openjdk11-jre-headless \
-	libstdc++ \
 	build-base
 
 USER red

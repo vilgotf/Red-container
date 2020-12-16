@@ -2,11 +2,6 @@
 
 FROM python:3.8-slim AS compile
 
-LABEL org.opencontainers.image.title Red-container
-LABEL org.opencontainers.image.description Minimal rootless implementation of the Red Discord bot
-LABEL org.opencontainers.image.source https://github.com/vilgotf/Red-docker
-LABEL org.opencontainers.image.licenses GPL-3.0-only
-
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
 RUN apt update \
@@ -19,6 +14,11 @@ RUN find ~/.local/lib/python3.8/site-packages -regex '^.*\(__pycache__\|\.py[co]
 
 
 FROM python:3.8-slim AS common
+
+LABEL org.opencontainers.image.title Red-container
+LABEL org.opencontainers.image.description Minimal rootless implementation of the Red Discord bot
+LABEL org.opencontainers.image.source https://github.com/vilgotf/Red-docker
+LABEL org.opencontainers.image.licenses GPL-3.0-only
 
 ENV PATH="/home/red/.local/bin:$PATH"
 
