@@ -3,19 +3,39 @@ name: build
 on:
   schedule:
     - cron: '0 * * * *'
-  workflow_dispatch:
 
 jobs:
-  alpine:
+  check_debian:
     runs-on: ubuntu-latest
+    outputs:
+      should-update: ${{ steps.check.outputs.should-update }}
     steps:
       -
+        id: check
+        name: Check new release
+        uses: vilgotf/container-update-action@main
+        with:
+          baseimage: library/python:3.8-slim
+          image: vilgotf/red-discordbot:debian
+          pypi: red-discordbot
+  check_alpine:
+    runs-on: ubuntu-latest
+    outputs:
+      should-update: ${{ steps.check.outputs.should-update }}
+    steps:
+      -
+        id: check
         name: Check new release
         uses: vilgotf/container-update-action@main
         with:
           baseimage: library/python:3.8-alpine
           image: vilgotf/red-discordbot
           pypi: red-discordbot
+  alpine:
+    needs: check_alpine
+    if: needs.check_alpine.outputs.should-update == 'true'
+    runs-on: ubuntu-latest
+    steps:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -52,15 +72,10 @@ jobs:
           push: true
           tags: vilgotf/red-discordbot:full
   debian:
+    needs: check_debian
+    if: needs.check_debian.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Check new release
-        uses: vilgotf/container-update-action@main
-        with:
-          baseimage: library/python:3.8-slim
-          image: vilgotf/red-discordbot:debian
-          pypi: red-discordbot
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
