@@ -9,7 +9,7 @@ Minimal rootless implementation of the Red Discord bot.
 1. `minimal` (no audio support)
 2. `audio` / `latest`
 3. `full` (gcc etcetera)
-4. `audio-debian`
+4. `audio-debian` / `debian`
 5. `full-debian`
 
 (1, 2 and 3 are based on Alpine)
@@ -28,3 +28,8 @@ If you want the container to continue run even when your not logged in:
 ```
 loginctl enable-linger <username>
 ```
+
+## Updates
+
+The image is automatically rebuilt every hour if a new release is out **or** if the baseimage has been updated.
+To update your own bot simply run `podman auto-update`.
