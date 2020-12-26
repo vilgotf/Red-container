@@ -2,8 +2,6 @@
 Minimal rootless implementation of the Red Discord bot.
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/vilgotf/red-discordbot)](https://hub.docker.com/r/vilgotf/red-discordbot)
-[![Image Size](https://images.microbadger.com/badges/image/vilgotf/red-discordbot.svg)](https://microbadger.com/images/vilgotf/red-discordbot)
-![build](https://github.com/vilgotf/Red-container/workflows/build/badge.svg?branch=main)
 
 ## List of tags
 1. `minimal` (no audio support)
