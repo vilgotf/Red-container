@@ -1,27 +1,26 @@
 # vim:sw=2:ts=2
 name: Check, build and deploy
 on:
-  #schedule:
-  #- cron: '0 * * * *'
-  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'
 
 jobs:
-  #check_alpine:
-  #  runs-on: ubuntu-latest
-  #  outputs:
-  #    should-update: ${{ steps.check.outputs.should-update }}
-  #  steps:
-  #    -
-  #      id: check
-  #      name: Check new release
-  #      uses: vilgotf/container-update-action@main
-  #      with:
-  #        baseimage: library/python:3.8-alpine
-  #        image: vilgotf/red-discordbot
-  #        pypi: red-discordbot
+  check_alpine:
+    runs-on: ubuntu-latest
+    outputs:
+      should-update: ${{ steps.check.outputs.should-update }}
+    steps:
+      -
+        id: check
+        name: Check new release
+        uses: vilgotf/container-update-action@main
+        with:
+          baseimage: library/python:3.8-alpine
+          image: vilgotf/red-discordbot
+          pypi: red-discordbot
   alpine:
-    #needs: check_alpine
-    #if: needs.check_alpine.outputs.should-update == 'true'
+    needs: check_alpine
+    if: needs.check_alpine.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -38,8 +37,8 @@ jobs:
         name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.run_id }}
+          path: /tmp/.alpine-buildx-cache
+          key: ${{ runner.os }}-buildx-alpine-${{ github.run_id }}
       -
         name: Login to DockerHub
         uses: docker/login-action@v1
@@ -55,24 +54,24 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: vilgotf/red-discordbot:${{ matrix.tags }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-  #check_debian:
-  #  runs-on: ubuntu-latest
-  #  outputs:
-  #    should-update: ${{ steps.check.outputs.should-update }}
-  #  steps:
-  #    -
-  #      id: check
-  #      name: Check new release
-  #      uses: vilgotf/container-update-action@main
-  #      with:
-  #        baseimage: library/python:3.8-slim
-  #        image: vilgotf/red-discordbot:debian
-  #        pypi: red-discordbot
+          cache-from: type=local,src=/tmp/.alpine-buildx-cache
+          cache-to: type=local,dest=/tmp/.alpine-buildx-cache
+  check_debian:
+    runs-on: ubuntu-latest
+    outputs:
+      should-update: ${{ steps.check.outputs.should-update }}
+    steps:
+      -
+        id: check
+        name: Check new release
+        uses: vilgotf/container-update-action@main
+        with:
+          baseimage: library/python:3.8-slim
+          image: vilgotf/red-discordbot:debian
+          pypi: red-discordbot
   debian:
-    #needs: check_debian
-    #if: needs.check_debian.outputs.should-update == 'true'
+    needs: check_debian
+    if: needs.check_debian.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -92,8 +91,8 @@ jobs:
         name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.run_id }}
+          path: /tmp/.debian-buildx-cache
+          key: ${{ runner.os }}-buildx-debian-${{ github.run_id }}
       -
         name: Login to DockerHub
         uses: docker/login-action@v1
@@ -106,8 +105,8 @@ jobs:
         with:
           file: ./Containerfile.debian
           target: ${{ matrix.base.target }}
-          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: vilgotf/red-discordbot:${{ matrix.base.tag }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=local,src=/tmp/.debian-buildx-cache
+          cache-to: type=local,dest=/tmp/.debian-buildx-cache
