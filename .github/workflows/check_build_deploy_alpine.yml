@@ -25,10 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 3
+      max-parallel: 1
       matrix:
         tags: [minimal, audio, latest, full]
-        platforms: [amd64, arm/v6, arm/v7, arm64]
     steps:
       -
         name: Set up QEMU
@@ -48,6 +47,6 @@ jobs:
         with:
           file: ./Containerfile.alpine
           target: ${{ matrix.tags }}
-          platforms: linux/${{ matrix.platforms }}
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: vilgotf/red-discordbot:${{ matrix.tags }}
