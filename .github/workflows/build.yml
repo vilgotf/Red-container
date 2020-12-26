@@ -1,8 +1,9 @@
 # vim:sw=2:ts=2
 name: build
 on:
-  schedule:
-    - cron: '0 * * * *'
+  #schedule:
+  #- cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   check_debian:
@@ -33,7 +34,7 @@ jobs:
           pypi: red-discordbot
   alpine:
     needs: check_alpine
-    if: needs.check_alpine.outputs.should-update == 'true'
+    #if: needs.check_alpine.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 3
@@ -64,7 +65,7 @@ jobs:
           tags: vilgotf/red-discordbot:${{ matrix.tags }}
   debian:
     needs: check_debian
-    if: needs.check_debian.outputs.should-update == 'true'
+    #if: needs.check_debian.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 3
