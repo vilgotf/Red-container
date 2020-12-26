@@ -51,6 +51,10 @@ FROM audio-build AS audio
 
 USER red
 
+
+FROM audio AS latest
+
+
 FROM audio-build AS full
 
 RUN apk --no-cache add \

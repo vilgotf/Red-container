@@ -35,7 +35,14 @@ jobs:
     needs: check_alpine
     if: needs.check_alpine.outputs.should-update == 'true'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tags: [minimal, audio, latest, full]
+        platforms: [amd64, arm/v6, arm/v7, arm64]
     steps:
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -46,35 +53,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push minimal
+        name: Build and push
         uses: docker/build-push-action@v2
         with:
           file: ./Containerfile.alpine
-          target: minimal
+          target: ${{ matrix.tags }}
+          platforms: linux/${{ matrix.platforms }}
           push: true
-          tags: vilgotf/red-discordbot:minimal
-      -
-        name: Build and push audio
-        uses: docker/build-push-action@v2
-        with:
-          file: ./Containerfile.alpine
-          target: audio
-          push: true
-          tags: |
-            vilgotf/red-discordbot:latest
-            vilgotf/red-discordbot:audio
-      -
-        name: Build and push full
-        uses: docker/build-push-action@v2
-        with:
-          file: ./Containerfile.alpine
-          target: full
-          push: true
-          tags: vilgotf/red-discordbot:full
+          tags: vilgotf/red-discordbot:${{ matrix.tags }}
   debian:
     needs: check_debian
     if: needs.check_debian.outputs.should-update == 'true'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tags: [audio, full]
+        platforms: [amd64, arm/v6, arm/v7, arm64]
     steps:
       -
         name: Set up Docker Buildx
@@ -86,20 +80,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push audio-debian
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          file: ./Containerfile.debian
+          target: ${{ matrix.tags }}
+          platforms: linux/${{ matrix.platforms }}
+          push: true
+          tags: vilgotf/red-discordbot:${{ matrix.tags }}-debian
+      -
+        name: Build and push Debian
         uses: docker/build-push-action@v2
         with:
           file: ./Containerfile.debian
           target: audio
+          platforms: linux/${{ matrix.platforms }}
           push: true
-          tags: |
-            vilgotf/red-discordbot:debian
-            vilgotf/red-discordbot:audio-debian
-      -
-        name: Build and push full-debian
-        uses: docker/build-push-action@v2
-        with:
-          file: ./Containerfile.debian
-          target: full
-          push: true
-          tags: vilgotf/red-discordbot:full-debian
+          tags: vilgotf/red-discordbot:debian
