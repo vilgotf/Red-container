@@ -20,7 +20,7 @@ jobs:
           pypi: red-discordbot
   alpine:
     needs: check_alpine
-    if: needs.check_alpine.outputs.should-update == 'true'
+    #if: needs.check_alpine.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -71,7 +71,7 @@ jobs:
           pypi: red-discordbot
   debian:
     needs: check_debian
-    if: needs.check_debian.outputs.should-update == 'true'
+    #if: needs.check_debian.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
