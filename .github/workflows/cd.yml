@@ -1,5 +1,5 @@
 # vim:sw=2:ts=2
-name: Check, build and deploy
+name: CD
 on:
   schedule:
     - cron: '0 * * * *'
@@ -18,7 +18,7 @@ jobs:
           baseimage: library/python:3.8-alpine
           image: vilgotf/red-discordbot
           pypi: red-discordbot
-  alpine:
+  build_and_deploy_alpine:
     needs: check_alpine
     if: needs.check_alpine.outputs.should-update == 'true'
     runs-on: ubuntu-latest
@@ -69,17 +69,16 @@ jobs:
           baseimage: library/python:3.8-slim
           image: vilgotf/red-discordbot:debian
           pypi: red-discordbot
-  debian:
+  build_and_deploy_debian:
     needs: check_debian
     if: needs.check_debian.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
       matrix:
-        base:
-          - { tag: audio-debian, target: audio }
-          - { tag: debian, target: audio }
-          - { tag: full-debian, target: full }
+        - { tag: debian, target: audio }
+        - { tag: audio-debian, target: audio }
+        - { tag: full-debian, target: full }
     steps:
       -
         name: Set up QEMU
@@ -104,9 +103,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           file: ./Containerfile.debian
-          target: ${{ matrix.base.target }}
+          target: ${{ matrix.target }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          tags: vilgotf/red-discordbot:${{ matrix.base.tag }}
+          tags: vilgotf/red-discordbot:${{ matrix.tag }}
           cache-from: type=local,src=/tmp/.debian-buildx-cache
           cache-to: type=local,dest=/tmp/.debian-buildx-cache
