@@ -76,9 +76,10 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        - { tag: debian, target: audio }
-        - { tag: audio-debian, target: audio }
-        - { tag: full-debian, target: full }
+        b:
+          - { tag: debian, target: audio }
+          - { tag: audio-debian, target: audio }
+          - { tag: full-debian, target: full }
     steps:
       -
         name: Set up QEMU
@@ -103,9 +104,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           file: ./Containerfile.debian
-          target: ${{ matrix.target }}
+          target: ${{ matrix.b.target }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          tags: vilgotf/red-discordbot:${{ matrix.tag }}
+          tags: vilgotf/red-discordbot:${{ matrix.b.tag }}
           cache-from: type=local,src=/tmp/.debian-buildx-cache
           cache-to: type=local,dest=/tmp/.debian-buildx-cache
