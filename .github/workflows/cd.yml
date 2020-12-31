@@ -6,22 +6,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  #check_alpine:
-  #  runs-on: ubuntu-latest
-  #  outputs:
-  #    should-update: ${{ steps.check.outputs.should-update }}
-  #  steps:
-  #    -
-  #      id: check
-  #      name: Check new release
-  #      uses: vilgotf/container-update-action@main
-  #      with:
-  #        baseimage: library/python:3.8-alpine
-  #        image: vilgotf/red-discordbot
-  #        pypi: red-discordbot
+  check_alpine:
+    runs-on: ubuntu-latest
+    outputs:
+      should-update: ${{ steps.check.outputs.should-update }}
+    steps:
+      -
+        id: check
+        name: Check new release
+        uses: vilgotf/container-update-action@main
+        with:
+          baseimage: library/python:3.8-alpine
+          image: vilgotf/red-discordbot
+          pypi: red-discordbot
   build_and_deploy_alpine:
-  #  needs: check_alpine
-  #  if: needs.check_alpine.outputs.should-update == 'true'
+    needs: check_alpine
+    if: needs.check_alpine.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -57,22 +57,22 @@ jobs:
           tags: vilgotf/red-discordbot:${{ matrix.tags }}
           cache-from: type=local,src=/tmp/.alpine-buildx-cache
           cache-to: type=local,dest=/tmp/.alpine-buildx-cache
-  #check_debian:
-  #  runs-on: ubuntu-latest
-  #  outputs:
-  #    should-update: ${{ steps.check.outputs.should-update }}
-  #  steps:
-  #    -
-  #      id: check
-  #      name: Check new release
-  #      uses: vilgotf/container-update-action@main
-  #      with:
-  #        baseimage: library/python:3.8-slim
-  #        image: vilgotf/red-discordbot:debian
-  #        pypi: red-discordbot
+  check_debian:
+    runs-on: ubuntu-latest
+    outputs:
+      should-update: ${{ steps.check.outputs.should-update }}
+    steps:
+      -
+        id: check
+        name: Check new release
+        uses: vilgotf/container-update-action@main
+        with:
+          baseimage: library/python:3.8-slim
+          image: vilgotf/red-discordbot:debian
+          pypi: red-discordbot
   build_and_deploy_debian:
-  #  needs: check_debian
-  #  if: needs.check_debian.outputs.should-update == 'true'
+    needs: check_debian
+    if: needs.check_debian.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
