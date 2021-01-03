@@ -3,7 +3,8 @@
 
 FROM python:3.8-slim AS compile
 
-ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+ENV PIP_NO_WARN_SCRIPT_LOCATION 0
 
 RUN apt update \
 	&& apt install -y --no-install-recommends \
@@ -16,12 +17,7 @@ RUN find ~/.local/lib/python*/site-packages -regex '^.*\(__pycache__\|\.py[co]\)
 
 FROM python:3.8-slim AS common
 
-LABEL org.opencontainers.image.title Red-container
-LABEL org.opencontainers.image.description Minimal rootless implementation of the Red Discord bot
-LABEL org.opencontainers.image.source https://github.com/vilgotf/Red-docker
-LABEL org.opencontainers.image.licenses GPL-3.0-only
-
-ENV PATH="/home/red/.local/bin:$PATH"
+ENV PATH /home/red/.local/bin:$PATH
 
 RUN useradd red
 
@@ -30,16 +26,16 @@ COPY --chown=red root/config.json /home/red/.config/Red-DiscordBot/config.json
 
 RUN mkdir -p /usr/share/man/man1 \
 	&& apt update \
-        && apt install -y --no-install-recommends \
+	&& apt install -y --no-install-recommends \
 	git \
 	openjdk-11-jre-headless \
-        && rm -rf /var/lib/apt/lists/* /usr/share/man
+	&& rm -rf /var/lib/apt/lists/* /usr/share/man
 
 VOLUME /data
 
 CMD if [ ! -z ${TOKEN+x} ]; then redbot container --edit --no-prompt --token $TOKEN; fi \
-        && if [ ! -z ${PREFIX+x} ]; then redbot container --edit --no-prompt --prefix $PREFIX; fi \
-        && exec redbot container
+	&& if [ ! -z ${PREFIX+x} ]; then redbot container --edit --no-prompt --prefix $PREFIX; fi \
+	&& exec redbot container
 
 
 FROM common AS audio
