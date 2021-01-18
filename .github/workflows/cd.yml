@@ -3,7 +3,6 @@ name: CD
 on:
   schedule:
     - cron: '0 * * * *'
-  workflow_dispatch:
 
 jobs:
   check_alpine:
@@ -18,10 +17,9 @@ jobs:
           baseimage: library/python:3.8-alpine
           image: vilgotf/red-discordbot
           pypi: red-discordbot
-          debug: true
   build_and_deploy_alpine:
     needs: check_alpine
-    if: needs.check_alpine.outputs.should-update
+    if: needs.check_alpine.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -87,10 +85,9 @@ jobs:
           baseimage: library/python:3.8-slim
           image: vilgotf/red-discordbot:debian
           pypi: red-discordbot
-          debug: true
   build_and_deploy_debian:
     needs: check_debian
-    if: needs.check_debian.outputs.should-update
+    if: needs.check_debian.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
