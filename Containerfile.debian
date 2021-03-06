@@ -21,6 +21,10 @@ ENV PATH /home/red/.local/bin:$PATH
 
 RUN useradd red
 
+RUN mkdir /data && chown red:red /data
+
+VOLUME /data
+
 COPY --chown=red --from=compile /root/.local /home/red/.local
 COPY --chown=red root/config.json /home/red/.config/Red-DiscordBot/config.json
 
@@ -30,8 +34,6 @@ RUN mkdir -p /usr/share/man/man1 \
 	git \
 	openjdk-11-jre-headless \
 	&& rm -rf /var/lib/apt/lists/* /usr/share/man
-
-VOLUME /data
 
 CMD if [ ! -z ${TOKEN+x} ]; then redbot container --edit --no-prompt --token $TOKEN; fi \
 	&& if [ ! -z ${PREFIX+x} ]; then redbot container --edit --no-prompt --prefix $PREFIX; fi \

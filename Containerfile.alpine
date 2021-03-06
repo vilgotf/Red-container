@@ -19,13 +19,15 @@ ENV PATH /home/red/.local/bin:$PATH
 
 RUN adduser -D red
 
+RUN mkdir /data && chown red:red /data
+
+VOLUME /data
+
 COPY --chown=red --from=compile /root/.local /home/red/.local
 COPY --chown=red root/config.json /home/red/.config/Red-DiscordBot/config.json
 
 RUN apk --no-cache add \
 	git
-
-VOLUME /data
 
 CMD if [ ! -z ${TOKEN+x} ]; then redbot container --edit --no-prompt --token $TOKEN; fi \
 	&& if [ ! -z ${PREFIX+x} ]; then redbot container --edit --no-prompt --prefix $PREFIX; fi \
